@@ -70,8 +70,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
+      setIsLoading(true)
       const API_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000/api'
-      const response = await axios.post(API_URL + '/auth/login', { email, password })
+      const response = await axios.post(API_URL + '/auth/login', { email, password }, {
+        timeout: 10000 // Timeout de 10 secondes pour éviter les appels pendants
+      })
       
       const { token, user } = response.data.data
       
@@ -81,15 +84,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       enqueueSnackbar('Connexion réussie', { variant: 'success' })
     } catch (error: any) {
-      enqueueSnackbar(error.response?.data?.message || 'Erreur de connexion', { variant: 'error' })
+      const message = error.response?.data?.message || 
+                     (error.response?.status === 429 ? 'Trop de tentatives, réessayez plus tard' : 'Erreur de connexion')
+      enqueueSnackbar(message, { variant: 'error' })
       throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const register = async (userData: RegisterData) => {
     try {
+      setIsLoading(true)
       const API_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000/api'
-      const response = await axios.post(API_URL + '/auth/register', userData)
+      const response = await axios.post(API_URL + '/auth/register', userData, {
+        timeout: 10000 // Timeout de 10 secondes pour éviter les appels pendants
+      })
       
       const { token, user } = response.data.data
       
@@ -99,8 +109,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       enqueueSnackbar('Inscription réussie', { variant: 'success' })
     } catch (error: any) {
-      enqueueSnackbar(error.response?.data?.message || 'Erreur d\'inscription', { variant: 'error' })
+      const message = error.response?.data?.message || 
+                     (error.response?.status === 429 ? 'Trop de tentatives, réessayez plus tard' : 'Erreur d\'inscription')
+      enqueueSnackbar(message, { variant: 'error' })
       throw error
+    } finally {
+      setIsLoading(false)
     }
   }
 

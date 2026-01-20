@@ -164,10 +164,10 @@ const EmployeeDashboard: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return <Warning sx={{ color: '#ff9800' }} />
-      case 'approved': return <CheckCircle sx={{ color: '#4caf50' }} />
-      case 'rejected': return <Close sx={{ color: '#f44336' }} />
-      case 'completed': return <CheckCircle sx={{ color: '#2196f3' }} />
+      case 'pending': return <Warning sx={{ color: 'warning.main' }} />
+      case 'approved': return <CheckCircle sx={{ color: 'success.main' }} />
+      case 'rejected': return <Close sx={{ color: 'error.main' }} />
+      case 'completed': return <CheckCircle sx={{ color: 'info.main' }} />
       default: return null
     }
   }
@@ -205,11 +205,11 @@ const EmployeeDashboard: React.FC = () => {
     <Layout>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1, display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, mb: 1, display: 'flex', alignItems: 'center' }}>
           <Schedule sx={{ mr: 1, color: 'primary.main' }} />
           Mon Tableau de Bord
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body1" color="text.secondary">
           Suivez vos réservations de véhicules
         </Typography>
       </Box>
@@ -217,82 +217,79 @@ const EmployeeDashboard: React.FC = () => {
       {/* Error Alert */}
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
-          <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-            Erreur lors du chargement
-          </Typography>
-          <Typography variant="caption">{error}</Typography>
+          {error}
         </Alert>
       )}
 
       {/* Statistics Cards */}
       <Grid container spacing={2} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ boxShadow: 2, borderLeft: '4px solid #1976d2' }}>
+          <Card sx={{ boxShadow: 1, borderRadius: 3, borderLeft: '4px solid primary.main' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
                     Total
                   </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600 }}>
                     {stats.totalReservations}
                   </Typography>
                 </Box>
-                <TrendingUp sx={{ fontSize: 32, color: '#1976d2', opacity: 0.3 }} />
+                <TrendingUp sx={{ fontSize: 32, color: 'primary.main', opacity: 0.5 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ boxShadow: 2, borderLeft: '4px solid #ff9800' }}>
+          <Card sx={{ boxShadow: 1, borderRadius: 3, borderLeft: '4px solid warning.main' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
                     En attente
                   </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600 }}>
                     {stats.pendingCount}
                   </Typography>
                 </Box>
-                <Warning sx={{ fontSize: 32, color: '#ff9800', opacity: 0.3 }} />
+                <Warning sx={{ fontSize: 32, color: 'warning.main', opacity: 0.5 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ boxShadow: 2, borderLeft: '4px solid #4caf50' }}>
+          <Card sx={{ boxShadow: 1, borderRadius: 3, borderLeft: '4px solid success.main' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
                     Approuvées
                   </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600 }}>
                     {stats.approvedCount}
                   </Typography>
                 </Box>
-                <CheckCircle sx={{ fontSize: 32, color: '#4caf50', opacity: 0.3 }} />
+                <CheckCircle sx={{ fontSize: 32, color: 'success.main', opacity: 0.5 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ boxShadow: 2, borderLeft: '4px solid #2196f3' }}>
+          <Card sx={{ boxShadow: 1, borderRadius: 3, borderLeft: '4px solid info.main' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
                     Complétées
                   </Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600 }}>
                     {stats.completedCount}
                   </Typography>
                 </Box>
-                <CheckCircle sx={{ fontSize: 32, color: '#2196f3', opacity: 0.3 }} />
+                <CheckCircle sx={{ fontSize: 32, color: 'info.main', opacity: 0.5 }} />
               </Box>
             </CardContent>
           </Card>
@@ -300,8 +297,8 @@ const EmployeeDashboard: React.FC = () => {
       </Grid>
 
       {/* Reservations Table */}
-      <Paper sx={{ borderRadius: 2, boxShadow: 2, overflow: 'hidden' }}>
-        <Typography variant="h6" sx={{ p: 2, fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+      <Paper sx={{ borderRadius: 3, boxShadow: 1, overflow: 'hidden' }}>
+        <Typography variant="h6" sx={{ p: 2, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
           <DirectionsCar sx={{ mr: 1, color: 'primary.main' }} />
           Mes Réservations
         </Typography>
@@ -310,14 +307,14 @@ const EmployeeDashboard: React.FC = () => {
         {reservations.length > 0 ? (
           <TableContainer>
             <Table>
-              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableHead sx={{ bgcolor: 'action.hover' }}>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Véhicule</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Horaires</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Motif</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Statut</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', textAlign: 'center' }}>Actions</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Véhicule</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Horaires</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Motif</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Statut</TableCell>
+                  <TableCell sx={{ fontWeight: 600, textAlign: 'center' }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -325,26 +322,26 @@ const EmployeeDashboard: React.FC = () => {
                   <TableRow key={reservation.id} hover>
                     <TableCell>
                       <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
                           {reservation.vehicle.brand} {reservation.vehicle.model}
                         </Typography>
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography variant="body2" color="text.secondary">
                           {reservation.vehicle.registrationNumber}
                         </Typography>
                       </Box>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">
+                      <Typography variant="body1">
                         {formatDate(reservation.reservationDate)}
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">
+                      <Typography variant="body1">
                         {reservation.startTime} - {reservation.endTime}
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">{reservation.purpose || '-'}</Typography>
+                      <Typography variant="body1">{reservation.purpose || '-'}</Typography>
                     </TableCell>
                     <TableCell>
                       <Chip
@@ -359,6 +356,7 @@ const EmployeeDashboard: React.FC = () => {
                       <Button
                         size="small"
                         variant="outlined"
+                        color="primary"
                         startIcon={<Info />}
                         onClick={() => {
                           setSelectedReservation(reservation)
@@ -375,8 +373,8 @@ const EmployeeDashboard: React.FC = () => {
           </TableContainer>
         ) : (
           <Box sx={{ p: 4, textAlign: 'center' }}>
-            <DirectionsCar sx={{ fontSize: 64, color: 'text.secondary', mb: 2, opacity: 0.3 }} />
-            <Typography variant="body2" color="text.secondary">
+            <DirectionsCar sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+            <Typography variant="body1" color="text.secondary">
               Aucune réservation pour le moment
             </Typography>
           </Box>
@@ -385,15 +383,14 @@ const EmployeeDashboard: React.FC = () => {
 
       {/* Details Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white', display: 'flex', alignItems: 'center' }}>
-          <Info sx={{ mr: 1 }} />
+        <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
           Détails de la réservation
         </DialogTitle>
-        <DialogContent sx={{ pt: 2.5 }}>
+        <DialogContent sx={{ pt: 2 }}>
           {selectedReservation && (
             <>
               <List disablePadding>
-                <ListItem disableGutters sx={{ mb: 2 }}>
+                <ListItem disableGutters sx={{ mb: 1 }}>
                   <ListItemIcon>
                     <DirectionsCar sx={{ color: 'primary.main' }} />
                   </ListItemIcon>
@@ -403,9 +400,9 @@ const EmployeeDashboard: React.FC = () => {
                   />
                 </ListItem>
 
-                <Divider sx={{ my: 1.5 }} />
+                <Divider sx={{ my: 1 }} />
 
-                <ListItem disableGutters sx={{ mb: 2 }}>
+                <ListItem disableGutters sx={{ mb: 1 }}>
                   <ListItemIcon>
                     <Event sx={{ color: 'primary.main' }} />
                   </ListItemIcon>
@@ -415,18 +412,18 @@ const EmployeeDashboard: React.FC = () => {
                   />
                 </ListItem>
 
-                <Divider sx={{ my: 1.5 }} />
+                <Divider sx={{ my: 1 }} />
 
-                <ListItem disableGutters sx={{ mb: 2 }}>
+                <ListItem disableGutters sx={{ mb: 1 }}>
                   <ListItemText
                     primary="Motif"
                     secondary={selectedReservation.purpose || '-'}
                   />
                 </ListItem>
 
-                <Divider sx={{ my: 1.5 }} />
+                <Divider sx={{ my: 1 }} />
 
-                <ListItem disableGutters sx={{ mb: 2 }}>
+                <ListItem disableGutters sx={{ mb: 1 }}>
                   <ListItemText
                     primary="Statut"
                     secondary={
@@ -436,7 +433,6 @@ const EmployeeDashboard: React.FC = () => {
                         color={getStatusColor(selectedReservation.status) as any}
                         size="small"
                         variant="outlined"
-                        sx={{ mt: 0.5 }}
                       />
                     }
                   />
@@ -444,14 +440,9 @@ const EmployeeDashboard: React.FC = () => {
 
                 {selectedReservation.status === 'rejected' && selectedReservation.rejectionReason && (
                   <>
-                    <Divider sx={{ my: 1.5 }} />
+                    <Divider sx={{ my: 1 }} />
                     <Alert severity="error" sx={{ mt: 1 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 'bold', display: 'block', mb: 0.5 }}>
-                        Raison du rejet :
-                      </Typography>
-                      <Typography variant="caption">
-                        {selectedReservation.rejectionReason}
-                      </Typography>
+                      Raison du rejet : {selectedReservation.rejectionReason}
                     </Alert>
                   </>
                 )}
@@ -459,7 +450,7 @@ const EmployeeDashboard: React.FC = () => {
             </>
           )}
         </DialogContent>
-        <DialogActions sx={{ py: 1.5, px: 2 }}>
+        <DialogActions sx={{ py: 1, px: 2 }}>
           <Button onClick={() => setOpenDialog(false)}>Fermer</Button>
 
           {selectedReservation?.status === 'pending' && (
@@ -477,7 +468,7 @@ const EmployeeDashboard: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ color: '#f44336', fontWeight: 'bold' }}>
+        <DialogTitle sx={{ color: 'error.main', fontWeight: 600 }}>
           Confirmer l'annulation
         </DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
@@ -485,7 +476,7 @@ const EmployeeDashboard: React.FC = () => {
             Êtes-vous sûr de vouloir annuler cette réservation ? Cette action ne peut pas être annulée.
           </Typography>
         </DialogContent>
-        <DialogActions sx={{ py: 1.5, px: 2 }}>
+        <DialogActions sx={{ py: 1, px: 2 }}>
           <Button onClick={() => setDeleteConfirmOpen(false)}>Non, garder</Button>
           <Button
             variant="contained"

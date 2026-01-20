@@ -51,7 +51,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Typography
             variant="h6"
             sx={{ flexGrow: 1, cursor: 'pointer' }}
-            onClick={() => navigate('/dashboard')}
+            onClick={() => {
+              if (user?.role === 'ADMIN') {
+                navigate('/admin/dashboard')
+              } else {
+                navigate('/dashboard')
+              }
+            }}
           >
             Réservation de Véhicules
           </Typography>
@@ -61,7 +67,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <Button
                 color="inherit"
                 startIcon={<Dashboard />}
-                onClick={() => navigate('/dashboard')}
+                onClick={() => user.role === 'ADMIN' ? navigate('/admin/dashboard') : navigate('/dashboard')}
                 sx={{
                   textTransform: 'none',
                   borderRadius: 1,

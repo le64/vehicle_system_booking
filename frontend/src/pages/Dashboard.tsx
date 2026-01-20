@@ -19,7 +19,8 @@ import {
   Chip,
   LinearProgress,
   Avatar,
-  AvatarGroup
+  AvatarGroup,
+  CircularProgress
 } from '@mui/material'
 import {
   DirectionsCar,
@@ -64,18 +65,21 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // Rediriger l'admin vers son dashboard dédié
+    if (user?.role === 'ADMIN') {
+      navigate('/admin/dashboard', { replace: true })
+      return
+    }
+    
     fetchDashboardData()
-  }, [user?.role])
+  }, [user?.role, navigate])
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true)
       
-      // Récupérer les statistiques selon le rôle
-      const statsEndpoint = user?.role === 'ADMIN' ? '/admin/stats' : '/admin/stats/employee'
-      console.log('Calling endpoint:', statsEndpoint, 'User role:', user?.role, 'Token:', localStorage.getItem('token')?.substring(0, 20))
-      
-      const statsResponse = await apiClient.get(statsEndpoint)
+      // Récupérer les statistiques pour les employés
+      const statsResponse = await apiClient.get('/admin/stats/employee')
       setStats(statsResponse.data.data)
 
       // Récupérer les réservations de l'utilisateur
@@ -88,6 +92,17 @@ const Dashboard: React.FC = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Afficher un loader pendant la redirection de l'admin
+  if (loading || user?.role === 'ADMIN') {
+    return (
+      <Layout>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+          <CircularProgress />
+        </Box>
+      </Layout>
+    )
   }
 
   const formatDate = (dateString: string) => {
@@ -139,84 +154,84 @@ const Dashboard: React.FC = () => {
   return (
     <Layout>
       {/* Header with User Info */}
-      <Box sx={{ mb: 4, pb: 2, borderBottom: '2px solid #f0f0f0' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+      <Box sx={{ mb: 4, pb: 2, borderBottom: '1px solid #e0e0e0' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Box>
-            <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold' }}>
+            <Typography variant="h5" component="h1" sx={{ fontWeight: 600 }}>
               Tableau de bord
             </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
+            <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
               Bienvenue, {user?.firstName} {user?.lastName}
             </Typography>
           </Box>
-          <Avatar sx={{ width: 64, height: 64, bgcolor: 'primary.main', fontSize: 24 }}>
+          <Avatar sx={{ width: 48, height: 48, bgcolor: 'primary.main' }}>
             {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
           </Avatar>
         </Box>
       </Box>
 
       {/* Main Statistics - Quick Overview */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ borderRadius: 2, boxShadow: 2, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', height: '100%' }}>
+          <Card sx={{ borderRadius: 3, boxShadow: 1, bgcolor: 'primary.main', color: 'white', height: '100%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <Box>
-                  <Typography variant="body2" sx={{ opacity: 0.9, mb: 1 }}>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
                     Véhicules Disponibles
                   </Typography>
-                  <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+                  <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
                     {stats?.availableVehicles || 0}
                   </Typography>
                   <Chip 
                     label={`${stats?.totalVehicles || 0} total`} 
                     size="small" 
-                    sx={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', fontWeight: 'bold' }}
+                    sx={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white' }}
                   />
                 </Box>
-                <DirectionsCar sx={{ fontSize: 48, opacity: 0.6 }} />
+                <DirectionsCar sx={{ fontSize: 40, opacity: 0.5 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ borderRadius: 2, boxShadow: 2, background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white', height: '100%' }}>
+          <Card sx={{ borderRadius: 3, boxShadow: 1, bgcolor: 'error.main', color: 'white', height: '100%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <Box>
-                  <Typography variant="body2" sx={{ opacity: 0.9, mb: 1 }}>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
                     Mes Réservations
                   </Typography>
-                  <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+                  <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
                     {stats?.activeReservations || 0}
                   </Typography>
-                  <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                  <Typography variant="caption">
                     En cours
                   </Typography>
                 </Box>
-                <CalendarToday sx={{ fontSize: 48, opacity: 0.6 }} />
+                <CalendarToday sx={{ fontSize: 40, opacity: 0.5 }} />
               </Box>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} sm={6} md={4}>
-          <Card sx={{ borderRadius: 2, boxShadow: 2, background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white', height: '100%' }}>
+          <Card sx={{ borderRadius: 3, boxShadow: 1, bgcolor: 'info.main', color: 'white', height: '100%' }}>
             <CardContent>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <Box>
-                  <Typography variant="body2" sx={{ opacity: 0.9, mb: 1 }}>
+                  <Typography variant="body2" sx={{ mb: 1 }}>
                     Taux d'Utilisation
                   </Typography>
-                  <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 1 }}>
+                  <Typography variant="h4" sx={{ fontWeight: 600, mb: 1 }}>
                     {stats ? Math.round(((stats.totalVehicles - stats.availableVehicles) / stats.totalVehicles) * 100) : 0}%
                   </Typography>
-                  <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                  <Typography variant="caption">
                     Flotte globale
                   </Typography>
                 </Box>
-                <TrendingUp sx={{ fontSize: 48, opacity: 0.6 }} />
+                <TrendingUp sx={{ fontSize: 40, opacity: 0.5 }} />
               </Box>
             </CardContent>
           </Card>
@@ -224,36 +239,35 @@ const Dashboard: React.FC = () => {
       </Grid>
 
       {/* Main Content Grid */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
         {/* My Recent Reservations - Featured */}
         <Grid item xs={12} md={7}>
-          <Card sx={{ borderRadius: 2, boxShadow: 3, height: '100%' }}>
+          <Card sx={{ borderRadius: 3, boxShadow: 1, height: '100%' }}>
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
                   <Schedule sx={{ mr: 1, color: 'primary.main' }} />
                   Mes Réservations Récentes
                 </Typography>
-                <Button size="small" onClick={() => navigate('/reservations')}>
+                <Button size="small" color="primary" onClick={() => navigate('/reservations')}>
                   Voir toutes
                 </Button>
               </Box>
-              <Divider sx={{ mb: 2 }} />
               
               {reservations.length > 0 ? (
                 <List disablePadding>
                   {reservations.slice(0, 4).map((reservation, index) => (
                     <React.Fragment key={reservation.id}>
-                      <ListItem sx={{ py: 2, px: 0, '&:hover': { backgroundColor: '#f5f5f5', borderRadius: 1 } }}>
+                      <ListItem sx={{ py: 1.5, px: 0, '&:hover': { bgcolor: 'action.hover' } }}>
                         <ListItemIcon sx={{ minWidth: 40 }}>
-                          <Avatar sx={{ width: 40, height: 40, bgcolor: 'primary.light', color: 'primary.main' }}>
-                            <DirectionsCar sx={{ fontSize: 20 }} />
+                          <Avatar sx={{ width: 36, height: 36, bgcolor: 'primary.light' }}>
+                            <DirectionsCar sx={{ fontSize: 18 }} />
                           </Avatar>
                         </ListItemIcon>
                         <ListItemText
                           primary={
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                              <Typography variant="body1" sx={{ fontWeight: 500 }}>
                                 {reservation.vehicle.brand} {reservation.vehicle.model}
                               </Typography>
                               <Chip 
@@ -266,12 +280,12 @@ const Dashboard: React.FC = () => {
                           }
                           secondary={
                             <Box sx={{ mt: 0.5 }}>
-                              <Typography variant="caption" display="block" sx={{ mb: 0.3 }}>
-                                <AccessTime sx={{ fontSize: 12, mr: 0.5, verticalAlign: 'middle' }} />
+                              <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                                <AccessTime sx={{ fontSize: 14, mr: 0.5 }} />
                                 {formatDate(reservation.startDate)} → {formatDate(reservation.endDate)}
                               </Typography>
                               {reservation.purpose && (
-                                <Typography variant="caption" display="block" color="textSecondary">
+                                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.25 }}>
                                   Motif: {reservation.purpose}
                                 </Typography>
                               )}
@@ -285,12 +299,13 @@ const Dashboard: React.FC = () => {
                 </List>
               ) : (
                 <Box sx={{ textAlign: 'center', py: 4 }}>
-                  <CalendarToday sx={{ fontSize: 48, color: 'text.secondary', mb: 1, opacity: 0.3 }} />
-                  <Typography color="textSecondary">
+                  <CalendarToday sx={{ fontSize: 48, color: 'text.secondary', mb: 1 }} />
+                  <Typography color="text.secondary">
                     Vous n'avez pas de réservations actuellement
                   </Typography>
                   <Button 
-                    size="small" 
+                    variant="contained"
+                    color="primary"
                     onClick={() => navigate('/vehicles')}
                     sx={{ mt: 2 }}
                   >
@@ -304,24 +319,24 @@ const Dashboard: React.FC = () => {
 
         {/* Quick Actions and Fleet Status */}
         <Grid item xs={12} md={5}>
-          <Grid container spacing={3} sx={{ height: '100%' }}>
+          <Grid container spacing={2} sx={{ height: '100%' }}>
             {/* Quick Actions */}
             <Grid item xs={12}>
-              <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
+              <Card sx={{ borderRadius: 3, boxShadow: 1 }}>
                 <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, display: 'flex', alignItems: 'center' }}>
                     <LocalOffer sx={{ mr: 1, color: 'primary.main' }} />
                     Actions Rapides
                   </Typography>
-                  <Divider sx={{ mb: 2 }} />
                   <Grid container spacing={1.5}>
                     <Grid item xs={12}>
                       <Button
                         fullWidth
                         variant="contained"
+                        color="primary"
                         onClick={() => navigate('/vehicles')}
                         startIcon={<DirectionsCar />}
-                        sx={{ py: 1.5 }}
+                        sx={{ py: 1.2, borderRadius: 2 }}
                       >
                         Consulter les Véhicules
                       </Button>
@@ -330,9 +345,10 @@ const Dashboard: React.FC = () => {
                       <Button
                         fullWidth
                         variant="outlined"
+                        color="primary"
                         onClick={() => navigate('/reservations')}
                         startIcon={<CalendarToday />}
-                        sx={{ py: 1.5 }}
+                        sx={{ py: 1.2, borderRadius: 2 }}
                       >
                         Gérer mes Réservations
                       </Button>
@@ -341,9 +357,10 @@ const Dashboard: React.FC = () => {
                       <Button
                         fullWidth
                         variant="outlined"
+                        color="primary"
                         onClick={() => navigate('/profile')}
                         startIcon={<Person />}
-                        sx={{ py: 1.5 }}
+                        sx={{ py: 1.2, borderRadius: 2 }}
                       >
                         Mon Profil
                       </Button>
@@ -355,37 +372,37 @@ const Dashboard: React.FC = () => {
 
             {/* Fleet Status Summary */}
             <Grid item xs={12}>
-              <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
+              <Card sx={{ borderRadius: 3, boxShadow: 1 }}>
                 <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2, display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, display: 'flex', alignItems: 'center' }}>
                     <DirectionsCar sx={{ mr: 1, color: 'primary.main' }} />
                     État de la Flotte
                   </Typography>
-                  <Divider sx={{ mb: 2 }} />
                   <List disablePadding>
                     <ListItem sx={{ py: 1, px: 0 }}>
                       <ListItemIcon sx={{ minWidth: 36 }}>
-                        <CheckCircle sx={{ color: '#4caf50' }} />
+                        <CheckCircle sx={{ color: 'success.main' }} />
                       </ListItemIcon>
                       <ListItemText
-                        primary={<Typography variant="body2">Disponibles</Typography>}
-                        secondary={<Typography variant="caption">{stats?.availableVehicles}/{stats?.totalVehicles}</Typography>}
+                        primary="Disponibles"
+                        secondary={`${stats?.availableVehicles}/${stats?.totalVehicles}`}
                       />
                     </ListItem>
                     <LinearProgress 
                       variant="determinate" 
                       value={(stats?.availableVehicles || 0) / (stats?.totalVehicles || 1) * 100}
-                      sx={{ my: 1, backgroundColor: '#f0f0f0', height: 6, borderRadius: 3 }}
+                      color="success"
+                      sx={{ my: 1, height: 6, borderRadius: 3 }}
                     />
                     {stats?.maintenanceCount !== undefined && stats.maintenanceCount > 0 && (
                       <>
                         <ListItem sx={{ py: 1, px: 0 }}>
                           <ListItemIcon sx={{ minWidth: 36 }}>
-                            <Warning sx={{ color: '#ff9800' }} />
+                            <Warning sx={{ color: 'warning.main' }} />
                           </ListItemIcon>
                           <ListItemText
-                            primary={<Typography variant="body2">En Maintenance</Typography>}
-                            secondary={<Typography variant="caption">{stats.maintenanceCount} véhicule(s)</Typography>}
+                            primary="En Maintenance"
+                            secondary={`${stats.maintenanceCount} véhicule(s)`}
                           />
                         </ListItem>
                       </>

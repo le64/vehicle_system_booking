@@ -163,25 +163,25 @@ const Dashboard: React.FC = () => {
     <Layout>
       <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Box>
-          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
             Tableau de bord
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body1" color="text.secondary" sx={{ mt: 0.5 }}>
             Bienvenue {user?.firstName}
           </Typography>
         </Box>
         <Avatar sx={{ bgcolor: 'primary.main' }}>{user?.firstName?.[0]}</Avatar>
       </Box>
 
-      <Grid container spacing={3} sx={{ mb: 4 }}>
+      <Grid container spacing={2} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ bgcolor: 'primary.main', color: 'common.white', borderRadius: 2, boxShadow: 3 }}>
+          <Card sx={{ bgcolor: 'primary.main', color: 'common.white', borderRadius: 3, boxShadow: 1 }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <DirectionsCar sx={{ mr: 1 }} />
                 <Typography variant="body2">Véhicules</Typography>
               </Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" sx={{ fontWeight: 600 }}>
                 {stats?.totalVehicles || 0}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -192,13 +192,13 @@ const Dashboard: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ bgcolor: 'success.main', color: 'common.white', borderRadius: 2, boxShadow: 3 }}>
+          <Card sx={{ bgcolor: 'success.main', color: 'common.white', borderRadius: 3, boxShadow: 1 }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Schedule sx={{ mr: 1 }} />
                 <Typography variant="body2">Actives</Typography>
               </Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" sx={{ fontWeight: 600 }}>
                 {reservationStats.active}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -209,13 +209,13 @@ const Dashboard: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ bgcolor: 'info.main', color: 'common.white', borderRadius: 2, boxShadow: 3 }}>
+          <Card sx={{ bgcolor: 'info.main', color: 'common.white', borderRadius: 3, boxShadow: 1 }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <CheckCircle sx={{ mr: 1 }} />
                 <Typography variant="body2">Terminées</Typography>
               </Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" sx={{ fontWeight: 600 }}>
                 {reservationStats.completed}
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -226,13 +226,13 @@ const Dashboard: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ bgcolor: 'warning.main', color: 'common.white', borderRadius: 2, boxShadow: 3 }}>
+          <Card sx={{ bgcolor: 'warning.main', color: 'common.white', borderRadius: 3, boxShadow: 1 }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <TrendingUp sx={{ mr: 1 }} />
                 <Typography variant="body2">Taux</Typography>
               </Box>
-              <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h4" sx={{ fontWeight: 600 }}>
                 {reservations.length ? Math.round((reservationStats.active / reservations.length) * 100) : 0}%
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -243,39 +243,38 @@ const Dashboard: React.FC = () => {
         </Grid>
       </Grid>
 
-      <Paper sx={{ borderRadius: 2, boxShadow: 3, mb: 4 }}>
-        <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)} variant="fullWidth">
-          <Tab icon={<CalendarToday />} label="À venir" />
-          <Tab icon={<LocalFireDepartment />} label="Populaires" />
-          <Tab icon={<TrendingUp />} label="Stats" />
+      <Paper sx={{ borderRadius: 3, boxShadow: 1, mb: 4 }}>
+        <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)} variant="fullWidth" sx={{ minHeight: 48 }}>
+          <Tab icon={<CalendarToday />} label="À venir" sx={{ minHeight: 48 }} />
+          <Tab icon={<LocalFireDepartment />} label="Populaires" sx={{ minHeight: 48 }} />
+          <Tab icon={<TrendingUp />} label="Stats" sx={{ minHeight: 48 }} />
         </Tabs>
       </Paper>
 
       <TabPanel value={tabValue} index={0}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {upcomingReservations.length ? upcomingReservations.map(r => (
             <Grid item xs={12} sm={6} key={r.id}>
-              <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
+              <Card sx={{ borderRadius: 3, boxShadow: 1 }}>
                 <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
                     {r.vehicle.brand} {r.vehicle.model}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
                     {r.vehicle.registrationNumber}
                   </Typography>
-                  <Divider sx={{ mb: 2 }} />
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <CalendarToday sx={{ mr: 1, color: 'text.secondary' }} />
+                    <CalendarToday sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />
                     <Typography variant="body2">
                       {formatDate(r.startDate)} - {formatDate(r.endDate)}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <AccessTime sx={{ mr: 1, color: 'text.secondary' }} />
+                    <AccessTime sx={{ mr: 1, color: 'text.secondary', fontSize: 20 }} />
                     <Typography variant="body2">{r.purpose}</Typography>
                   </Box>
                   <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-                    <Button variant="outlined" size="small" onClick={() => navigate('/reservations')}>
+                    <Button variant="outlined" color="primary" size="small" onClick={() => navigate('/reservations')}>
                       Détails
                     </Button>
                     <Button variant="text" color="error" size="small">
@@ -291,7 +290,7 @@ const Dashboard: React.FC = () => {
               <Typography color="text.secondary" sx={{ mb: 2 }}>
                 Aucune réservation à venir
               </Typography>
-              <Button variant="contained" onClick={() => navigate('/vehicles')}>
+              <Button variant="contained" color="primary" onClick={() => navigate('/vehicles')}>
                 Réserver
               </Button>
             </Box>
@@ -300,13 +299,13 @@ const Dashboard: React.FC = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={1}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {mostReservedVehicles.length ? mostReservedVehicles.map(([vehicle, count], i) => (
             <Grid item xs={12} sm={6} key={i}>
-              <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
+              <Card sx={{ borderRadius: 3, boxShadow: 1 }}>
                 <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Box>
-                    <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
                       {vehicle}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
@@ -333,20 +332,20 @@ const Dashboard: React.FC = () => {
       </TabPanel>
 
       <TabPanel value={tabValue} index={2}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
+            <Paper sx={{ p: 2, borderRadius: 3, boxShadow: 1 }}>
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
                 Réservations
               </Typography>
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ mb: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography>Actives</Typography>
                   <Chip label={reservationStats.active} color="primary" size="small" />
                 </Box>
-                <LinearProgress variant="determinate" value={reservations.length ? (reservationStats.active / reservations.length) * 100 : 0} />
+                <LinearProgress variant="determinate" value={reservations.length ? (reservationStats.active / reservations.length) * 100 : 0} color="primary" />
               </Box>
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ mb: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography>Terminées</Typography>
                   <Chip label={reservationStats.completed} color="success" size="small" />
@@ -363,31 +362,31 @@ const Dashboard: React.FC = () => {
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 3 }}>
+            <Paper sx={{ p: 2, borderRadius: 3, boxShadow: 1 }}>
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
                 Véhicules
               </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 3 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-around', mb: 2 }}>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'success.main' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600, color: 'success.main' }}>
                     {vehicles.filter(v => v.status === 'available').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">Disponibles</Typography>
                 </Box>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'warning.main' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600, color: 'warning.main' }}>
                     {vehicles.filter(v => v.status === 'maintenance').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">Maintenance</Typography>
                 </Box>
                 <Box sx={{ textAlign: 'center' }}>
-                  <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'error.main' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 600, color: 'error.main' }}>
                     {vehicles.filter(v => v.status === 'unavailable').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">Indisponibles</Typography>
                 </Box>
               </Box>
-              <LinearProgress variant="determinate" value={vehicles.length ? (vehicles.filter(v => v.status === 'available').length / vehicles.length) * 100 : 0} />
+              <LinearProgress variant="determinate" value={vehicles.length ? (vehicles.filter(v => v.status === 'available').length / vehicles.length) * 100 : 0} color="success" />
               <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
                 {vehicles.length ? Math.round((vehicles.filter(v => v.status === 'available').length / vehicles.length) * 100) : 0}% disponibles
               </Typography>

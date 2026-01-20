@@ -22,7 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Routes protégées */}
+          {/* Route Dashboard générique - redirige selon le rôle */}
           <Route
             path="/dashboard"
             element={
@@ -32,6 +32,7 @@ function App() {
             }
           />
 
+          {/* Routes Employé */}
           <Route
             path="/vehicles"
             element={
@@ -60,7 +61,7 @@ function App() {
           />
 
           <Route
-            path="/dashboard"
+            path="/employee/dashboard"
             element={
               <PrivateRoute requiredRole="EMPLOYEE">
                 <EmployeeDashboard />

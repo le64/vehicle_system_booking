@@ -179,19 +179,19 @@ const Vehicles: React.FC = () => {
     <Layout>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1, display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h5" sx={{ fontWeight: 600, mb: 1, display: 'flex', alignItems: 'center' }}>
           <DirectionsCar sx={{ mr: 1, color: 'primary.main' }} />
           Réserver un véhicule
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body1" color="text.secondary">
           Sélectionnez un véhicule disponible dans notre parc
         </Typography>
       </Box>
 
       {/* Search and Filters */}
-      <Paper sx={{ p: 2.5, mb: 3, borderRadius: 2, boxShadow: 2 }}>
+      <Paper sx={{ p: 2, mb: 4, borderRadius: 3, boxShadow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={12} md={5}>
+          <Grid item xs={12} md={5}>
             <TextField
               fullWidth
               size="small"
@@ -201,10 +201,10 @@ const Vehicles: React.FC = () => {
               InputProps={{
                 startAdornment: <Search sx={{ mr: 1, color: 'text.secondary' }} />
               }}
-              sx={{ backgroundColor: '#f5f5f5' }}
+              sx={{ bgcolor: 'background.paper' }}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={3.5}>
+          <Grid item xs={12} md={3.5}>
             <FormControl fullWidth size="small">
               <InputLabel>Statut</InputLabel>
               <Select
@@ -219,7 +219,7 @@ const Vehicles: React.FC = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={6} md={3.5}>
+          <Grid item xs={12} md={3.5}>
             <FormControl fullWidth size="small">
               <InputLabel>Type</InputLabel>
               <Select
@@ -241,8 +241,8 @@ const Vehicles: React.FC = () => {
       {/* Results Summary */}
       {filteredVehicles.length > 0 && (
         <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="body2" color="text.secondary">
-            <strong>{filteredVehicles.length}</strong> véhicule(s) trouvé(s)
+          <Typography variant="body1" color="text.secondary">
+            {filteredVehicles.length} véhicule(s) trouvé(s)
           </Typography>
         </Box>
       )}
@@ -255,32 +255,30 @@ const Vehicles: React.FC = () => {
               <Grid item xs={12} sm={6} md={4} key={vehicle.id}>
                 <Card sx={{ 
                   height: '100%', 
-                  borderRadius: 2, 
-                  boxShadow: 3,
+                  borderRadius: 3, 
+                  boxShadow: 1,
                   display: 'flex',
                   flexDirection: 'column',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
                   '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 4
+                    boxShadow: 3
                   }
                 }}>
-                  {/* Vehicle Icon Header */}
+                  {/* Vehicle Header */}
                   <Box sx={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    bgcolor: 'primary.main',
                     color: 'white',
-                    p: 2.5,
+                    p: 2,
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <DirectionsCar sx={{ fontSize: 32, mr: 1 }} />
+                      <DirectionsCar sx={{ fontSize: 28, mr: 1 }} />
                       <Box>
-                        <Typography variant="h6" sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 600, lineHeight: 1.2 }}>
                           {vehicle.brand}
                         </Typography>
-                        <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                        <Typography variant="body2">
                           {vehicle.model}
                         </Typography>
                       </Box>
@@ -289,34 +287,35 @@ const Vehicles: React.FC = () => {
                       label={getStatusText(vehicle.status)} 
                       color={getStatusColor(vehicle.status) as any}
                       size="small"
-                      sx={{ fontWeight: 'bold' }}
                     />
                   </Box>
 
                   {/* Vehicle Details */}
-                  <CardContent sx={{ flexGrow: 1, pt: 2.5 }}>
+                  <CardContent sx={{ flexGrow: 1, pt: 2 }}>
                     {/* Registration and Type */}
                     <Box sx={{ mb: 2 }}>
-                      <Typography variant="caption" color="text.secondary" display="block">
+                      <Typography variant="body2" color="text.secondary" display="block" sx={{ mb: 0.5 }}>
                         Immatriculation
                       </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
                         {vehicle.registrationNumber}
                       </Typography>
                     </Box>
 
-                    <Divider sx={{ my: 1.5 }} />
+                    <Divider sx={{ my: 1 }} />
 
                     {/* Specifications List */}
-                    <List disablePadding sx={{ mb: 1 }}>
+                    <List disablePadding>
                       {vehicle.year && (
                         <ListItem disableGutters sx={{ py: 0.5 }}>
                           <ListItemIcon sx={{ minWidth: 32 }}>
                             <Build sx={{ fontSize: 18, color: 'primary.main' }} />
                           </ListItemIcon>
                           <ListItemText
-                            primary={<Typography variant="caption" sx={{ color: 'text.secondary' }}>Année</Typography>}
-                            secondary={<Typography variant="body2" sx={{ fontWeight: 'bold' }}>{vehicle.year} ({getVehicleAge(vehicle.year)} ans)</Typography>}
+                            primary="Année"
+                            primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                            secondary={`${vehicle.year} (${getVehicleAge(vehicle.year)} ans)`}
+                            secondaryTypographyProps={{ variant: 'body1', fontWeight: 500 }}
                           />
                         </ListItem>
                       )}
@@ -327,8 +326,10 @@ const Vehicles: React.FC = () => {
                             <LocalGasStation sx={{ fontSize: 18, color: 'primary.main' }} />
                           </ListItemIcon>
                           <ListItemText
-                            primary={<Typography variant="caption" sx={{ color: 'text.secondary' }}>Carburant</Typography>}
-                            secondary={<Typography variant="body2" sx={{ fontWeight: 'bold' }}>{vehicle.fuelType}</Typography>}
+                            primary="Carburant"
+                            primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                            secondary={vehicle.fuelType}
+                            secondaryTypographyProps={{ variant: 'body1', fontWeight: 500 }}
                           />
                         </ListItem>
                       )}
@@ -339,8 +340,10 @@ const Vehicles: React.FC = () => {
                             <People sx={{ fontSize: 18, color: 'primary.main' }} />
                           </ListItemIcon>
                           <ListItemText
-                            primary={<Typography variant="caption" sx={{ color: 'text.secondary' }}>Places</Typography>}
-                            secondary={<Typography variant="body2" sx={{ fontWeight: 'bold' }}>{vehicle.seatsCount} places</Typography>}
+                            primary="Places"
+                            primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                            secondary={`${vehicle.seatsCount} places`}
+                            secondaryTypographyProps={{ variant: 'body1', fontWeight: 500 }}
                           />
                         </ListItem>
                       )}
@@ -351,8 +354,10 @@ const Vehicles: React.FC = () => {
                             <Speed sx={{ fontSize: 18, color: 'primary.main' }} />
                           </ListItemIcon>
                           <ListItemText
-                            primary={<Typography variant="caption" sx={{ color: 'text.secondary' }}>Kilométrage</Typography>}
-                            secondary={<Typography variant="body2" sx={{ fontWeight: 'bold' }}>{vehicle.mileage.toLocaleString('fr-FR')} km</Typography>}
+                            primary="Kilométrage"
+                            primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                            secondary={`${vehicle.mileage.toLocaleString('fr-FR')} km`}
+                            secondaryTypographyProps={{ variant: 'body1', fontWeight: 500 }}
                           />
                         </ListItem>
                       )}
@@ -362,31 +367,33 @@ const Vehicles: React.FC = () => {
                           <DirectionsCar sx={{ fontSize: 18, color: 'primary.main' }} />
                         </ListItemIcon>
                         <ListItemText
-                          primary={<Typography variant="caption" sx={{ color: 'text.secondary' }}>Type</Typography>}
-                          secondary={<Typography variant="body2" sx={{ fontWeight: 'bold' }}>{vehicle.type}</Typography>}
+                          primary="Type"
+                          primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                          secondary={vehicle.type}
+                          secondaryTypographyProps={{ variant: 'body1', fontWeight: 500 }}
                         />
                       </ListItem>
                     </List>
                   </CardContent>
 
                   {/* Actions */}
-                  <CardActions sx={{ pt: 1 }}>
+                  <CardActions sx={{ p: 2, pt: 0 }}>
                     {vehicle.status === 'available' ? (
                       <Button
                         fullWidth
-                        size="small"
                         variant="contained"
+                        color="primary"
                         onClick={() => {
                           setSelectedVehicle(vehicle)
                           setOpenDialog(true)
                         }}
                         startIcon={<CalendarToday />}
-                        sx={{ py: 1 }}
+                        sx={{ borderRadius: 2 }}
                       >
                         Réserver
                       </Button>
                     ) : (
-                      <Button fullWidth size="small" disabled>
+                      <Button fullWidth variant="outlined" disabled>
                         {getStatusText(vehicle.status)}
                       </Button>
                     )}
@@ -403,21 +410,23 @@ const Vehicles: React.FC = () => {
                 count={Math.ceil(filteredVehicles.length / itemsPerPage)}
                 page={page}
                 onChange={(_, value) => setPage(value)}
+                color="primary"
               />
             </Box>
           )}
         </>
       ) : (
         <Box sx={{ textAlign: 'center', py: 6 }}>
-          <Search sx={{ fontSize: 64, color: 'text.secondary', mb: 2, opacity: 0.3 }} />
+          <Search sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
           <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>
             Aucun véhicule trouvé
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
             Essayez de modifier vos filtres de recherche
           </Typography>
           <Button 
             variant="outlined" 
+            color="primary"
             onClick={() => {
               setFilterStatus('all')
               setFilterType('all')
@@ -431,11 +440,10 @@ const Vehicles: React.FC = () => {
 
       {/* Reservation Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white', py: 2, display: 'flex', alignItems: 'center' }}>
-          <CalendarToday sx={{ mr: 1 }} />
+        <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
           Réserver {selectedVehicle?.brand} {selectedVehicle?.model}
         </DialogTitle>
-        <DialogContent sx={{ pt: 2.5 }}>
+        <DialogContent sx={{ pt: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={fr}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -484,12 +492,13 @@ const Vehicles: React.FC = () => {
             </Grid>
           </LocalizationProvider>
         </DialogContent>
-        <DialogActions sx={{ py: 1.5, px: 2 }}>
+        <DialogActions sx={{ p: 2 }}>
           <Button onClick={() => setOpenDialog(false)}>
             Annuler
           </Button>
           <Button
             variant="contained"
+            color="primary"
             onClick={async () => {
               if (!selectedVehicle || !reservationDate || !startTime || !endTime) {
                 enqueueSnackbar('Veuillez remplir tous les champs', { variant: 'error' })
@@ -529,7 +538,7 @@ const Vehicles: React.FC = () => {
             }}
             disabled={!reservationDate || !startTime || !endTime || reservationLoading}
           >
-            {reservationLoading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
+            {reservationLoading ? <CircularProgress size={20} sx={{ mr: 1, color: 'white' }} /> : null}
             Confirmer
           </Button>
         </DialogActions>

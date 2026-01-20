@@ -15,12 +15,30 @@ app.use(cors({
   credentials: true
 }));
 
-// Limiteur de requêtes
+// Limiteur de requêtes global
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limite chaque IP à 100 requêtes par fenêtre
+  max: 500 // limite chaque IP à 500 requêtes par fenêtre
 });
-app.use('/api/', limiter);
+
+// Limiteur stricte pour les routes sensibles (auth, login)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // max 10 tentatives de login par IP
+  message: 'Trop de tentatives de connexion, réessayez plus tard',
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+// Appliquer le limiteur global sauf sur les routes auth
+app.use((req, res, next) => {
+  // Appliquer le limiteur strict sur les routes auth sensibles
+  if (req.path === '/api/auth/login' || req.path === '/api/auth/register') {
+    return authLimiter(req, res, next);
+  }
+  // Appliquer le limiteur global pour les autres
+  limiter(req, res, next);
+});
 
 // Middleware pour parser le JSON
 app.use(express.json());
