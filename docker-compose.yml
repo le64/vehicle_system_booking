@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: vehicle-booking-backend
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      JWT_SECRET: ${JWT_SECRET:-your-production-secret-key}
+      BCRYPT_SALT_ROUNDS: 12
+      DATABASE_PATH: /app/database/vehicle_booking.db
+      LOG_LEVEL: info
+      CORS_ORIGIN: http://localhost:3000
+    volumes:
+      - ./backend/database:/app/database
+      - ./backend/logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - vehicle-network
+
+  frontend:
+    build: ./frontend
+    container_name: vehicle-booking-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: http://localhost:5000/api
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - vehicle-network
+
+networks:
+  vehicle-network:
+    driver: bridge
